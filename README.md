@@ -1,2 +1,2 @@
-# tidytuesday
+# TidyTuesday
 Tidy Tuesday Challenges
