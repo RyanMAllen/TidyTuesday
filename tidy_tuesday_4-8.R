@@ -1,5 +1,6 @@
 library(dplyr)
 library(ggplot2)
+library(data.table)
 
 player_dob <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-09/player_dob.csv")
 
@@ -20,12 +21,6 @@ top_10m <- slice(males, 1:10)
 females <- as.data.table(filter(g, gender == "Female") %>% arrange(desc(rolling_win_count)))
 top_10f <- slice(females, 1:10)
                                                         
-ggplot(top_10m, aes(x=reorder(name, table(rolling_win_count)[rolling_win_count]), y = rolling_win_count)) + 
-    geom_bar(stat = 'identity')
-
-ggplot(top_10m,
-       aes(x=reorder(name, name,
-                     function(x)-length(x)) , y = rolling_win_count)) + geom_bar(stat = 'identity')
 
 top_10m$name <- factor(top_10m$name, levels = top_10m$name[order(-top_10m$rolling_win_count)])
 
@@ -41,9 +36,4 @@ chart1 + geom_bar(stat='identity') + theme(panel.grid.major = element_blank(), a
                                           panel.background = element_blank(), axis.line = element_line(colour = "black")) +
     geom_text(aes(label=rolling_win_count), vjust=-0.5) + ggtitle("Top 10 Female Tennis Players")
 
-tops <- rbind(top_10f, top_10m)
 
-p <- ggplot(tops, aes(name, rolling_win_count)) + geom_point()
-
-# Use vars() to supply variables from the dataset:
-p + facet_grid(rows = vars(tops$gender))
